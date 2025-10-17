@@ -137,7 +137,7 @@ const App: React.FC = () => {
             onThemeToggle={handleThemeToggle}
             onChangeChat={() => setIsModalOpen(true)}
           />
-          <main className="flex-1 overflow-y-auto">
+          <main className="flex-1 overflow-y-auto relative" id="chat-container">
             {loading && (
               <div className="flex items-center justify-center h-full">
                 <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-cyan-400"></div>
