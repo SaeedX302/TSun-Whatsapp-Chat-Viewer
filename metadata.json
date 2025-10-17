@@ -1,0 +1,5 @@
+{
+  "name": "TSun Whatsapp Chat Viewer",
+  "description": "A visually stunning and luxurious interface to view exported WhatsApp chat files. It renders chat history with support for all standard WhatsApp formatting and custom color codes, presented in a smooth, modern UI.",
+  "requestFramePermissions": []
+}
