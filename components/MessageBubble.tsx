@@ -1,19 +1,30 @@
-
 import React from 'react';
 import { Message } from '../types';
 
 interface MessageBubbleProps {
   message: Message;
+  searchQuery: string;
 }
 
-// This parser function is self-contained within the component that uses it.
-const renderFormattedText = (text: string): React.ReactNode => {
+const renderFormattedText = (text: string, searchQuery: string): React.ReactNode => {
     const regex = /(\[c\]|\[[0-9a-fA-F]{6}\])|(\*.*?\*)|(_.*?_)|(~.*?~)|(```.*?```)|(https?:\/\/[^\s]+)/g;
 
     const parts = text.split(regex).filter(Boolean);
     const elements: React.ReactNode[] = [];
     let key = 0;
     let currentColor = 'inherit';
+
+    const highlight = (content: string) => {
+        if (!searchQuery || !content.toLowerCase().includes(searchQuery.toLowerCase())) {
+            return content;
+        }
+        const subParts = content.split(new RegExp(`(${searchQuery})`, 'gi'));
+        return subParts.map((subPart, i) =>
+            subPart.toLowerCase() === searchQuery.toLowerCase() ?
+            <mark key={i} className="bg-yellow-400 text-black rounded px-1 py-0.5 mx-0">{subPart}</mark> :
+            subPart
+        );
+    };
 
     parts.forEach(part => {
         key++;
@@ -22,25 +33,25 @@ const renderFormattedText = (text: string): React.ReactNode => {
         } else if (part === '[c]') {
             currentColor = 'inherit';
         } else if (part.startsWith('*') && part.endsWith('*')) {
-            elements.push(<strong key={key} style={{ color: currentColor }}>{renderFormattedText(part.slice(1, -1))}</strong>);
+            elements.push(<strong key={key} style={{ color: currentColor }}>{renderFormattedText(part.slice(1, -1), searchQuery)}</strong>);
         } else if (part.startsWith('_') && part.endsWith('_')) {
-            elements.push(<em key={key} style={{ color: currentColor }}>{renderFormattedText(part.slice(1, -1))}</em>);
+            elements.push(<em key={key} style={{ color: currentColor }}>{renderFormattedText(part.slice(1, -1), searchQuery)}</em>);
         } else if (part.startsWith('~') && part.endsWith('~')) {
-            elements.push(<del key={key} style={{ color: currentColor }}>{renderFormattedText(part.slice(1, -1))}</del>);
+            elements.push(<del key={key} style={{ color: currentColor }}>{renderFormattedText(part.slice(1, -1), searchQuery)}</del>);
         } else if (part.startsWith('```') && part.endsWith('```')) {
-            elements.push(<code key={key} className="font-mono bg-white/10 px-2 py-1 rounded text-sm whitespace-pre-wrap" style={{ color: currentColor }}>{part.slice(3, -3)}</code>);
+            elements.push(<code key={key} className="font-mono bg-black/10 dark:bg-white/10 px-2 py-1 rounded text-sm whitespace-pre-wrap" style={{ color: currentColor }}>{highlight(part.slice(3, -3))}</code>);
         } else if (part.match(/^https?:\/\//)) {
-            elements.push(<a href={part} key={key} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline break-all">{part}</a>);
+            elements.push(<a href={part} key={key} target="_blank" rel="noopener noreferrer" className="text-cyan-600 dark:text-cyan-400 hover:underline break-all">{highlight(part)}</a>);
         } else {
-            elements.push(<span key={key} style={{ color: currentColor }}>{part}</span>);
+            elements.push(<span key={key} style={{ color: currentColor }}>{highlight(part)}</span>);
         }
     });
 
     return <>{elements}</>;
 };
 
-const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
-  const isMe = false; // For this specific chat, there's only one sender. We can style it as "other".
+const MessageBubble: React.FC<MessageBubbleProps> = ({ message, searchQuery }) => {
+  const isMe = false; // This is a placeholder; in a real app, you'd determine this dynamically
 
   return (
     <div className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
@@ -48,14 +59,14 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
         <div
           className={`relative px-4 py-3 rounded-2xl transition-all duration-300 hover:shadow-lg ${
             isMe
-              ? 'bg-gradient-to-br from-blue-500 to-purple-600 rounded-br-none'
-              : 'bg-gradient-to-br from-gray-700 to-gray-800 rounded-bl-none'
+              ? 'bg-gradient-to-tr from-sky-500 to-cyan-400 text-white rounded-br-none'
+              : 'bg-white/80 text-slate-800 dark:bg-gradient-to-br from-gray-700 to-gray-800 dark:text-white rounded-bl-none'
           }`}
         >
-          <div className="whitespace-pre-wrap break-words text-white leading-relaxed">
-            {renderFormattedText(message.content)}
+          <div className="whitespace-pre-wrap break-words leading-relaxed">
+            {renderFormattedText(message.content, searchQuery)}
           </div>
-          <div className="text-right text-xs text-gray-400 mt-2">
+          <div className={`text-right text-xs mt-2 ${isMe ? 'text-sky-100/90' : 'text-gray-500 dark:text-gray-400'}`}>
             {message.time}
           </div>
         </div>
