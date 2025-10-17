@@ -55,18 +55,18 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, searchQuery }) =
 
   return (
     <div className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-      <div className="flex items-end max-w-lg lg:max-w-xl">
+      <div className="flex items-end max-w-md lg:max-w-lg">
         <div
-          className={`relative px-4 py-3 rounded-2xl transition-all duration-300 hover:shadow-lg ${
+          className={`relative px-3 py-2 rounded-2xl transition-all duration-300 hover:shadow-lg ${
             isMe
               ? 'bg-gradient-to-tr from-sky-500 to-cyan-400 text-white rounded-br-none'
-              : 'bg-white/80 text-slate-800 dark:bg-gradient-to-br from-gray-700 to-gray-800 dark:text-white rounded-bl-none'
+              : 'bg-gray-100 text-slate-800 dark:bg-white/10 dark:backdrop-blur-lg dark:text-white rounded-bl-none'
           }`}
         >
-          <div className="whitespace-pre-wrap break-words leading-relaxed">
+          <div className="whitespace-pre-wrap break-words leading-relaxed text-sm">
             {renderFormattedText(message.content, searchQuery)}
           </div>
-          <div className={`text-right text-xs mt-2 ${isMe ? 'text-sky-100/90' : 'text-gray-500 dark:text-gray-400'}`}>
+          <div className={`text-right text-xs mt-1 ${isMe ? 'text-sky-100/90' : 'text-gray-500 dark:text-gray-400'}`}>
             {message.time}
           </div>
         </div>

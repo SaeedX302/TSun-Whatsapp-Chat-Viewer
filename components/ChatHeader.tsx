@@ -11,7 +11,7 @@ interface ChatHeaderProps {
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ title, searchQuery, onSearchChange, theme, onThemeToggle, onChangeChat }) => {
   return (
-    <header className="flex-shrink-0 flex items-center justify-between p-4 bg-white/60 dark:bg-black/20 backdrop-blur-md border-b border-gray-200/50 dark:border-white/10 z-10">
+    <header className="flex-shrink-0 flex items-center justify-between p-4 bg-gray-50 dark:bg-white/5 dark:backdrop-blur-md border-b border-gray-200 dark:border-white/10 z-10">
       <div className="flex items-center space-x-4">
         <div className="relative">
           <img src="https://i.pravatar.cc/40?u=chat-avatar" alt="Avatar" className="w-10 h-10 rounded-full" />

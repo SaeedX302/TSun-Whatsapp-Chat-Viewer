@@ -59,7 +59,7 @@ const App: React.FC = () => {
         const storedPrefs = window.localStorage.getItem('theme');
         if (storedPrefs === 'light' || storedPrefs === 'dark') return storedPrefs;
     }
-    return 'light'; // Default to light theme
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   };
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -73,9 +73,12 @@ const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    document.documentElement.classList.remove('light', 'dark');
-    document.documentElement.classList.add(theme);
-    localStorage.setItem('theme', theme);
+    const root = document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(theme);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('theme', theme);
+    }
   }, [theme]);
 
   useEffect(() => {
@@ -124,8 +127,8 @@ const App: React.FC = () => {
   return (
     <div className={theme}>
       <GistUrlModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleUrlSubmit} />
-      <div className="min-h-screen bg-gradient-to-br from-slate-100 to-sky-100 dark:bg-gradient-to-br from-gray-900 via-slate-900 to-black text-slate-800 dark:text-white flex flex-col items-center justify-center p-2 sm:p-4 font-sans">
-        <div className="w-full max-w-4xl h-[95vh] flex flex-col bg-white/70 dark:bg-black/30 backdrop-blur-2xl rounded-3xl shadow-2xl dark:shadow-cyan-500/10 border border-gray-200/50 dark:border-white/10 overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-white to-gray-50 dark:bg-gradient-to-br from-gray-900 via-slate-900 to-black text-slate-800 dark:text-white flex flex-col items-center justify-center p-2 sm:p-4 font-sans">
+        <div className="w-full max-w-4xl h-[95vh] flex flex-col bg-white dark:bg-white/5 dark:backdrop-blur-2xl rounded-3xl shadow-2xl dark:shadow-cyan-500/10 border border-gray-200 dark:border-white/10 overflow-hidden">
           <ChatHeader 
             title={chatTitle}
             searchQuery={searchQuery}
