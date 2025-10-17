@@ -49,7 +49,7 @@ const ChatView: React.FC<ChatViewProps> = ({ messages, searchQuery }) => {
 
     return (
         <>
-            <div className="p-4 sm:p-6 space-y-1">
+            <div className="p-3 sm:p-4 space-y-1">
                 <div ref={startOfMessagesRef} />
                 {messages.map((message) => {
                     const showDateSeparator = message.date !== lastDate;
@@ -70,20 +70,20 @@ const ChatView: React.FC<ChatViewProps> = ({ messages, searchQuery }) => {
             </div>
 
             {showScrollButtons && messages.length > 0 && (
-                <div className="fixed bottom-24 right-6 sm:right-8 flex flex-col gap-2 z-20">
+                <div className="absolute bottom-4 right-4 sm:right-6 flex flex-col gap-2 z-20">
                     <button
                         onClick={scrollToTop}
-                        className="bg-white dark:bg-white/10 dark:backdrop-blur-lg text-slate-800 dark:text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 border border-gray-200 dark:border-white/20"
+                        className="bg-white dark:bg-white/10 dark:backdrop-blur-lg text-slate-800 dark:text-white p-2.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 border border-gray-200 dark:border-white/20"
                         title="Go to First Message"
                     >
-                        <img src="https://img.icons8.com/plasticine/100/up--v1.png" alt="Top" className="w-6 h-6" />
+                        <img src="https://img.icons8.com/plasticine/100/up--v1.png" alt="Top" className="w-5 h-5" />
                     </button>
                     <button
                         onClick={scrollToBottom}
-                        className="bg-white dark:bg-white/10 dark:backdrop-blur-lg text-slate-800 dark:text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 border border-gray-200 dark:border-white/20"
+                        className="bg-white dark:bg-white/10 dark:backdrop-blur-lg text-slate-800 dark:text-white p-2.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 border border-gray-200 dark:border-white/20"
                         title="Go to Last Message"
                     >
-                        <img src="https://img.icons8.com/plasticine/100/down--v1.png" alt="Bottom" className="w-6 h-6" />
+                        <img src="https://img.icons8.com/plasticine/100/down--v1.png" alt="Bottom" className="w-5 h-5" />
                     </button>
                 </div>
             )}

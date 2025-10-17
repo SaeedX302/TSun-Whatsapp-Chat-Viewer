@@ -127,8 +127,8 @@ const App: React.FC = () => {
   return (
     <div className={theme}>
       <GistUrlModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleUrlSubmit} />
-      <div className="min-h-screen bg-gradient-to-br from-white to-gray-50 dark:bg-gradient-to-br from-gray-900 via-slate-900 to-black text-slate-800 dark:text-white flex flex-col items-center justify-center p-2 sm:p-4 font-sans">
-        <div className="w-full max-w-4xl h-[95vh] flex flex-col bg-white dark:bg-white/5 dark:backdrop-blur-2xl rounded-3xl shadow-2xl dark:shadow-cyan-500/10 border border-gray-200 dark:border-white/10 overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-white to-gray-50 dark:bg-gradient-to-br from-gray-900 via-slate-900 to-black text-slate-800 dark:text-white flex flex-col items-center justify-start pt-4 sm:pt-6 p-2 sm:p-4 font-sans">
+        <div className="w-full max-w-4xl h-[85vh] flex flex-col bg-white dark:bg-white/5 dark:backdrop-blur-2xl rounded-3xl shadow-2xl dark:shadow-cyan-500/10 border border-gray-200 dark:border-white/10 overflow-hidden">
           <ChatHeader 
             title={chatTitle}
             searchQuery={searchQuery}
@@ -137,7 +137,7 @@ const App: React.FC = () => {
             onThemeToggle={handleThemeToggle}
             onChangeChat={() => setIsModalOpen(true)}
           />
-          <main className="flex-1 overflow-y-auto relative" id="chat-container">
+          <main className="flex-1 overflow-y-auto overflow-x-hidden relative" id="chat-container">
             {loading && (
               <div className="flex items-center justify-center h-full">
                 <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-cyan-400"></div>
