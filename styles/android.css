@@ -67,6 +67,14 @@
     font-size: 16px;
   }
 
+  /* The app renders its own Material clear button, so hide the native one that
+     Chrome adds to search inputs. */
+  input[type='search']::-webkit-search-cancel-button,
+  input[type='search']::-webkit-search-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
   /* Chrome on Android adds a focus ring on tap; the ripple already conveys
      feedback, so keep outlines only for keyboard users. */
   :focus:not(:focus-visible) {

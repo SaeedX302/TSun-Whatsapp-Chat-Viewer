@@ -1,0 +1,15 @@
+12/03/2024, 09:12 - Messages and calls are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read or listen to them.
+12/03/2024, 09:13 - Aarav Mehta: Morning! Did you see the new *TSun Chat Viewer* build? 🎉
+12/03/2024, 09:14 - Priya Nair: Yes! The glass theme is gorgeous 😍
+12/03/2024, 09:14 - Priya Nair: Quick question — does it support _italics_ and ~strikethrough~ too?
+12/03/2024, 09:15 - Aarav Mehta: It does! Even ```monospace blocks``` and [00a884]custom colours[c] are supported.
+12/03/2024, 09:16 - Priya Nair: Sending you the export now
+12/03/2024, 09:16 - Priya Nair: <Media omitted>
+12/03/2024, 09:18 - Aarav Mehta: Here is the repo: https://github.com/SaeedX302/TSun-Whatsapp-Chat-Viewer
+12/03/2024, 09:19 - Aarav Mehta: Multi-line message test
+second line of the very same message
+third line — still one bubble
+12/03/2024, 09:20 - Priya Nair: 😂 perfect
+13/03/2024, 08:02 - Priya Nair: Opening it on my Android now 📱
+13/03/2024, 08:03 - Aarav Mehta: It is installable too — Add to home screen 🚀
+13/03/2024, 08:05 - Priya Nair: Looks like a real app. Amazing work!

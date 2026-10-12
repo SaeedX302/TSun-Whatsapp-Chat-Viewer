@@ -1,12 +1,16 @@
 {
   "name": "tsun-whatsapp-chat-viewer",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "verify:ui": "node scripts/verify-ui.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.546.0",
@@ -14,14 +18,19 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
     "@types/node": "^22.14.0",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.6.1",
+    "jsdom": "^25.0.1",
     "postcss": "^8.5.29",
     "tailwindcss": "^3.4.19",
     "typescript": "~5.8.2",
-    "vite": "^6.2.0"
-  }
+    "vite": "^6.2.0",
+    "vitest": "^2.1.9"
+  },
+  "description": "View exported WhatsApp chats in a fast, responsive, Material Design 3 interface that installs on Android as a PWA (or as a native Capacitor app)."
 }

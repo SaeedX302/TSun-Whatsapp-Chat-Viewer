@@ -110,6 +110,10 @@ const App: React.FC = () => {
       const parsed = parseChatExport(text, { selfSender: selfRef.current });
       setMessages(parsed.messages);
       setParticipants(parsed.participants);
+      // Keep the app-level identity in sync with the parser's resolution so
+      // "my" messages render on the right from the very first paint.
+      selfRef.current = parsed.selfSender;
+      setSelfSender(parsed.selfSender);
       setTitle(
         options?.fileName ? options.fileName.replace(/\.txt$/i, '') : parsed.title || 'TSun Chat'
       );
@@ -133,6 +137,8 @@ const App: React.FC = () => {
     const fromQuery = params.get('chat');
     if (!fromQuery) return;
     setChatUrl(fromQuery);
+    // Persist it like an in-app submission, otherwise a reload would lose the chat.
+    window.localStorage.setItem(URL_KEY, fromQuery);
     params.delete('chat');
     const query = params.toString();
     window.history.replaceState({}, '', `${window.location.pathname}${query ? `?${query}` : ''}`);
@@ -264,7 +270,9 @@ const App: React.FC = () => {
 
   const subtitle = loading
     ? 'Loading…'
-    : `${participants.length || 1} participant${participants.length === 1 ? '' : 's'} · ${messages.length.toLocaleString()} messages`;
+    : messages.length === 0
+      ? 'No chat loaded yet'
+      : `${messages.length.toLocaleString()} messages · last active ${dateRange?.to ?? '—'}`;
 
   const hasContent = messages.length > 0;
 
@@ -391,6 +399,15 @@ const App: React.FC = () => {
                       onClick={() => setLoadSheetOpen(true)}
                     >
                       Open a .txt export
+                    </MaterialButton>
+                    <MaterialButton
+                      size="lg"
+                      variant="outlined"
+                      fullWidth
+                      icon={<Sparkles className="h-4 w-4" />}
+                      onClick={() => handleUrlSubmit('/sample-chat.txt')}
+                    >
+                      Try a sample chat
                     </MaterialButton>
                     {canInstall && (
                       <MaterialButton

@@ -55,7 +55,8 @@ export const ParticipantsSheet: React.FC<ParticipantsSheetProps> = ({
         <Stat
           icon={<Check className="h-4 w-4" />}
           label="Range"
-          value={dateRange ? `${dateRange.from} → ${dateRange.to}` : '—'}
+          value={dateRange ? `${dateRange.from} →\n${dateRange.to}` : '—'}
+          wrap
         />
       </div>
 
@@ -69,6 +70,7 @@ export const ParticipantsSheet: React.FC<ParticipantsSheetProps> = ({
                 onClick={() => pick(participant.name)}
                 className="ripple-host flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-black/5 dark:hover:bg-white/5"
                 aria-pressed={isSelf}
+                aria-label={`Set ${participant.name} as you`}
               >
                 <Avatar name={participant.name} size="md" />
                 <span className="min-w-0 flex-1">
@@ -97,16 +99,22 @@ export const ParticipantsSheet: React.FC<ParticipantsSheetProps> = ({
   );
 };
 
-const Stat: React.FC<{ icon: React.ReactNode; label: string; value: string }> = ({
-  icon,
-  label,
-  value,
-}) => (
+const Stat: React.FC<{
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  /** Allow the value to wrap onto two lines (used by the date range). */
+  wrap?: boolean;
+}> = ({ icon, label, value, wrap }) => (
   <div className="rounded-2xl border border-black/5 bg-white px-2 py-3 text-center dark:border-white/10 dark:bg-white/5">
     <span className="mx-auto mb-1 flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700 dark:bg-primary-500/20 dark:text-primary-200">
       {icon}
     </span>
-    <span className="block truncate text-[13px] font-semibold text-slate-900 dark:text-white">
+    <span
+      className={`block text-[13px] font-semibold leading-tight text-slate-900 dark:text-white ${
+        wrap ? 'break-words' : 'truncate'
+      }`}
+    >
       {value}
     </span>
     <span className="block text-[10.5px] uppercase tracking-wide text-slate-500 dark:text-slate-400">

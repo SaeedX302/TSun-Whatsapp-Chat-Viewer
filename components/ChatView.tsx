@@ -25,7 +25,7 @@ interface ChatViewProps {
 const PAGE_SIZE = 150;
 
 const DateSeparator: React.FC<{ date: string }> = ({ date }) => (
-  <div className="sticky top-2 z-10 flex justify-center py-2">
+  <div className="flex justify-center py-2">
     <span className="rounded-lg bg-white/95 px-3 py-1 text-[11.5px] font-medium uppercase tracking-wide text-slate-600 shadow-sm dark:bg-[#182229]/95 dark:text-slate-300">
       {date}
     </span>
@@ -66,9 +66,24 @@ const ChatView: React.FC<ChatViewProps> = ({
 }) => {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [atBottom, setAtBottom] = useState(true);
-  const bottomRef = useRef<HTMLDivElement>(null);
-  const topRef = useRef<HTMLDivElement>(null);
+  const [atTop, setAtTop] = useState(true);
   const didInitialScroll = useRef(false);
+
+  /** Scrolls the container itself so the trailing padding is respected. */
+  const scrollToBottom = useCallback(
+    (behavior: ScrollBehavior = 'smooth') => {
+      const container = scrollRef.current;
+      if (!container) return;
+      container.scrollTo({ top: container.scrollHeight, behavior });
+    },
+    [scrollRef]
+  );
+
+  const scrollToTop = useCallback(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+    container.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [scrollRef]);
 
   const startIndex = Math.max(0, messages.length - visibleCount);
   const visibleMessages = useMemo(() => messages.slice(startIndex), [messages, startIndex]);
@@ -84,19 +99,23 @@ const ChatView: React.FC<ChatViewProps> = ({
   useEffect(() => {
     if (didInitialScroll.current || visibleMessages.length === 0) return;
     didInitialScroll.current = true;
-    bottomRef.current?.scrollIntoView({ block: 'end' });
-  }, [visibleMessages.length]);
+    scrollToBottom('auto');
+    // The jump happens before the scroll listener settles, so seed the state
+    // explicitly to avoid showing a stale "scroll to latest" button.
+    setAtBottom(true);
+  }, [scrollToBottom, visibleMessages.length]);
 
   useEffect(() => {
-    if (searchQuery) return;
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }, [visibleMessages.length, searchQuery]);
+    if (searchQuery || !didInitialScroll.current) return;
+    scrollToBottom('smooth');
+  }, [scrollToBottom, visibleMessages.length, searchQuery]);
 
   const handleScroll = useCallback(() => {
     const container = scrollRef.current;
     if (!container) return;
     const distanceFromBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
     setAtBottom(distanceFromBottom < 120);
+    setAtTop(container.scrollTop < 200);
     onScrollStateChange?.({
       elevated: container.scrollTop > 4,
       atBottom: distanceFromBottom < 120,
@@ -134,10 +153,6 @@ const ChatView: React.FC<ChatViewProps> = ({
     enabled: Boolean(onRefresh),
   });
 
-  const scrollToTop = () => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  const scrollToBottom = () =>
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-
   let lastDate: string | null = null;
 
   if (messages.length === 0) {
@@ -163,7 +178,6 @@ const ChatView: React.FC<ChatViewProps> = ({
       )}
 
       <div className="flex flex-col px-1.5 pb-24 pt-1 sm:px-3 md:px-6">
-        <div ref={topRef} className="h-px" />
 
         {hasEarlier && (
           <div className="flex justify-center py-2">
@@ -195,8 +209,6 @@ const ChatView: React.FC<ChatViewProps> = ({
             </React.Fragment>
           );
         })}
-
-        <div ref={bottomRef} className="h-1" />
       </div>
 
       {/* Floating scroll controls, bottom-right so they stay thumb reachable. */}
@@ -206,20 +218,22 @@ const ChatView: React.FC<ChatViewProps> = ({
             label="Scroll to latest message"
             size="sm"
             className="pointer-events-auto animate-pop-in"
-            onClick={scrollToBottom}
+            onClick={() => scrollToBottom()}
           >
             <ArrowDown />
           </Fab>
         )}
-        <Fab
-          label="Scroll to first message"
-          size="sm"
-          variant="surface"
-          className="pointer-events-auto"
-          onClick={scrollToTop}
-        >
-          <ArrowUp />
-        </Fab>
+        {!atTop && (
+          <Fab
+            label="Scroll to first message"
+            size="sm"
+            variant="surface"
+            className="pointer-events-auto animate-pop-in"
+            onClick={scrollToTop}
+          >
+            <ArrowUp />
+          </Fab>
+        )}
       </div>
     </div>
   );
