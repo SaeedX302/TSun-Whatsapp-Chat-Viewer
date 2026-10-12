@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="TSun Chat Viewer">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00d09c" />
+      <stop offset="55%" stop-color="#00a884" />
+      <stop offset="100%" stop-color="#00785f" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#g)" />
+  <path
+    d="M256 116c-79.5 0-144 56.4-144 126 0 39.6 20.9 74.9 53.6 98.2-1.6 20.4-8.7 39.4-20.3 55.4a8 8 0 0 0 9.1 12.3c28.2-7.2 51.6-18.6 69.4-31.2 10.4 2.2 21.2 3.3 32.2 3.3 79.5 0 144-56.4 144-126S335.5 116 256 116Z"
+    fill="#ffffff"
+  />
+  <circle cx="192" cy="243" r="17" fill="#00a884" />
+  <circle cx="256" cy="243" r="17" fill="#00a884" />
+  <circle cx="320" cy="243" r="17" fill="#00a884" />
+</svg>

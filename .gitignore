@@ -23,3 +23,14 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Generated native shells (Capacitor)
+android/
+ios/
+
+# UI verification screenshots
+ui-screenshots
+
+# Playwright / test output
+playwright-report
+coverage

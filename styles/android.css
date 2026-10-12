@@ -1,0 +1,264 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Android / Material Design 3 foundations
+   --------------------------------------------------------------------------
+   Everything in this file exists to make the web app behave like a native
+   Android application: safe-area aware layout, ripple feedback, M3 motion
+   curves, GPU-friendly scrolling and a WhatsApp-like chat canvas.
+   ========================================================================== */
+
+@layer base {
+  :root {
+    /* Notch / gesture-bar insets, exposed as CSS variables so they can be
+       consumed anywhere (including inside animated containers). */
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+
+    /* Keyboard inset, written by useKeyboardInset() */
+    --keyboard-inset: 0px;
+
+    /* Material 3 motion tokens */
+    --m3-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1);
+    --m3-standard: cubic-bezier(0.2, 0, 0, 1);
+
+    color-scheme: light;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  /* Use the *dynamic* viewport (dvh) so the layout does not jump when the
+     Android URL bar collapses/expands while scrolling. */
+  html {
+    height: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    touch-action: manipulation;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overscroll-behavior-y: none; /* kill the browser pull-to-refresh */
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  #root {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Never let Android zoom the page when an input receives focus: inputs must
+     render at >= 16px, so bump the app-bar search field accordingly. */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+
+  /* The app renders its own Material clear button, so hide the native one that
+     Chrome adds to search inputs. */
+  input[type='search']::-webkit-search-cancel-button,
+  input[type='search']::-webkit-search-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* Chrome on Android adds a focus ring on tap; the ripple already conveys
+     feedback, so keep outlines only for keyboard users. */
+  :focus:not(:focus-visible) {
+    outline: none;
+
+@layer components {
+  /* --- Safe area helpers ------------------------------------------------ */
+  .pt-safe {
+    padding-top: var(--safe-top);
+  }
+  .pb-safe {
+    padding-bottom: var(--safe-bottom);
+  }
+  .pl-safe {
+    padding-left: var(--safe-left);
+  }
+  .pr-safe {
+    padding-right: var(--safe-right);
+  }
+  .px-safe {
+    padding-left: var(--safe-left);
+    padding-right: var(--safe-right);
+  }
+  /* Top app bar clears the status bar without pushing content around. */
+  .app-bar-safe {
+    padding-top: var(--safe-top);
+  }
+
+  /* --- Material ripple -------------------------------------------------- */
+  .ripple-host {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  .ripple-ink {
+    position: absolute;
+    border-radius: 9999px;
+    pointer-events: none;
+    transform: scale(0);
+    opacity: 0.28;
+    background-color: currentColor;
+    animation: ripple-expand 550ms var(--m3-standard) forwards;
+    will-change: transform, opacity;
+  }
+  @keyframes ripple-expand {
+    to {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+  }
+
+  /* --- Surfaces & elevation -------------------------------------------- */
+  .m3-elevation-1 {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.18), 0 1px 3px 1px rgba(0, 0, 0, 0.1);
+  }
+  .m3-elevation-2 {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.18), 0 2px 6px 2px rgba(0, 0, 0, 0.12);
+  }
+  .m3-elevation-3 {
+    box-shadow: 0 4px 8px 3px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  /* --- App bar ---------------------------------------------------------- */
+  .app-bar {
+    background-color: rgb(255 255 255 / 0.92);
+    backdrop-filter: saturate(140%) blur(12px);
+    -webkit-backdrop-filter: saturate(140%) blur(12px);
+    transition: box-shadow 200ms var(--m3-standard), background-color 200ms var(--m3-standard);
+  }
+  .dark .app-bar {
+    background-color: rgb(15 21 18 / 0.88);
+  }
+  .app-bar[data-elevated='true'] {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.18), 0 2px 6px 2px rgba(0, 0, 0, 0.12);
+  }
+
+  /* --- WhatsApp style chat canvas -------------------------------------- */
+  .chat-canvas {
+    background-color: #efeae2;
+    background-image: radial-gradient(rgba(0, 0, 0, 0.055) 1px, transparent 1px),
+      radial-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+    background-size: 22px 22px, 22px 22px;
+    background-position: 0 0, 11px 11px;
+  }
+  .dark .chat-canvas {
+    background-color: #0b141a;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  }
+
+  /* --- Messages --------------------------------------------------------- */
+  .bubble {
+    box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
+  }
+
+  /* Long lists stay smooth on mid-range Android phones: the browser skips
+     rendering work for off-screen messages. */
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 72px;
+  }
+
+  /* --- Scrollbars ------------------------------------------------------- */
+  .material-scroll {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(120, 120, 120, 0.45) transparent;
+  }
+  .material-scroll::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .material-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .material-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(120, 120, 120, 0.45);
+    border-radius: 9999px;
+  }
+
+  /* --- Bottom sheet ----------------------------------------------------- */
+  .sheet-handle {
+    width: 32px;
+    height: 4px;
+    border-radius: 9999px;
+    background-color: currentColor;
+    opacity: 0.3;
+  }
+
+  .scrim {
+    background-color: rgba(0, 0, 0, 0.45);
+    animation: scrim-in 200ms var(--m3-standard) both;
+  }
+  @keyframes scrim-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* --- Text selection / chrome ----------------------------------------- */
+  .no-select {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  .selectable {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
+@layer utilities {
+  .min-h-dvh {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  .h-dvh {
+    height: 100vh;
+    height: 100dvh;
+  }
+  /* Keyboard-aware bottom offset for floating actions. */
+  .bottom-nav {
+    bottom: calc(var(--safe-bottom) + var(--keyboard-inset) + 0.75rem);
+  }
+}
+
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

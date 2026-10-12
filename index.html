@@ -2,42 +2,93 @@
 <html lang="en" class="light">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="https://cdn-icons-png.flaticon.com/512/5968/5968841.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"
+    />
     <title>TSun Chat Viewer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class'
-      }
-    </script>
+    <meta
+      name="description"
+      content="View exported WhatsApp chats in a beautiful, native-feeling interface. Installable on Android."
+    />
+
+    <!-- Android / PWA -------------------------------------------------- -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1512" media="(prefers-color-scheme: dark)" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="TSun Chat" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="format-detection" content="telephone=no,address=no,email=no,date=no" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- Icons ---------------------------------------------------------- -->
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+    <link rel="alternate icon" type="image/png" href="/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+
+    <!-- Fonts: Roboto is the Android system typeface -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
-      @keyframes fade-in-scale {
-        from {
-          opacity: 0;
-          transform: scale(0.95);
-        }
-        to {
-          opacity: 1;
-          transform: scale(1);
-        }
+      /* Boot splash: painted before the JS bundle lands so an installed
+         Android app never flashes a white screen. */
+      html,
+      body {
+        margin: 0;
+        background-color: #fdfcfb;
       }
-      .animate-fade-in-scale {
-        animation: fade-in-scale 0.3s ease-out forwards;
+      html.dark,
+      html.dark body {
+        background-color: #0b141a;
+      }
+      #boot-splash {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        background: linear-gradient(160deg, #00d09c, #00785f);
+        z-index: 9999;
+        transition: opacity 260ms cubic-bezier(0.2, 0, 0, 1);
+      }
+      #boot-splash img {
+        width: 96px;
+        height: 96px;
+        border-radius: 24px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+      }
+      #boot-splash span {
+        color: rgba(255, 255, 255, 0.92);
+        font: 500 14px/1.4 Roboto, system-ui, sans-serif;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      #boot-splash[data-hidden='true'] {
+        opacity: 0;
+        pointer-events: none;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
-  }
-}
-</script>
-</head>
+  </head>
   <body>
     <div id="root"></div>
+    <div id="boot-splash" aria-hidden="true">
+      <img src="/icons/icon.svg" alt="" />
+      <span>TSun Chat Viewer</span>
+    </div>
+    <noscript>
+      <div style="padding: 24px; font-family: Roboto, system-ui, sans-serif">
+        TSun Chat Viewer needs JavaScript enabled to render your WhatsApp chat exports.
+      </div>
+    </noscript>
     <script type="module" src="/index.tsx"></script>
   </body>
 </html>
