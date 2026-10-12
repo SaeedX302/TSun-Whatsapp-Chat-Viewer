@@ -30,7 +30,7 @@
     "tailwindcss": "^3.4.19",
     "typescript": "~5.8.2",
     "vite": "^6.2.0",
-    "vitest": "^2.1.9"
+    "vitest": "^3.2.7"
   },
   "description": "View exported WhatsApp chats in a fast, responsive, Material Design 3 interface that installs on Android as a PWA (or as a native Capacitor app)."
 }

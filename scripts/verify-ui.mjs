@@ -4,7 +4,7 @@
  * Usage:
  *   npm run build
  *   npx vite preview --port 4173 &
- *   npx playwright install chromium        # once
+ *   npm i -D playwright && npx playwright install chromium   # once
  *   npm run verify:ui
  *
  * It renders the app at the viewport sizes that matter (small phone, phone,

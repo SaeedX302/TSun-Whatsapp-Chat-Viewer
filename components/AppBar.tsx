@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { ArrowLeft, MoreVertical, Search, X } from 'lucide-react';
 import Avatar from './ui/Avatar';
+import { useMediaQuery } from '../hooks/useDevice';
 import IconButton from './ui/IconButton';
 
 export interface AppBarProps {
@@ -40,6 +41,8 @@ export const AppBar: React.FC<AppBarProps> = ({
   resultCount,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  // Landscape phones have very little vertical room, so the bar shrinks.
+  const compact = useMediaQuery('(orientation: landscape) and (max-height: 480px)');
 
   useEffect(() => {
     if (searchActive) {
@@ -61,7 +64,11 @@ export const AppBar: React.FC<AppBarProps> = ({
       data-elevated={elevated}
       className="app-bar app-bar-safe z-20 shrink-0 border-b border-black/5 px-safe dark:border-white/10"
     >
-      <div className="flex h-14 items-center gap-1 px-1.5 sm:h-16 sm:px-2">
+      <div
+        className={`flex items-center gap-1 px-1.5 sm:px-2 ${
+          compact ? 'h-12' : 'h-14 sm:h-16'
+        }`}
+      >
         {searchActive ? (
           <>
             <IconButton

@@ -168,6 +168,7 @@ jobs:
 npm run typecheck     # strict TypeScript
 npm test              # parser + app integration tests (jsdom)
 npm run build && npm run preview &
+npm i -D playwright && npx playwright install chromium   # once
 npm run verify:ui     # headless screenshots + layout assertions (Playwright)
 ```
 

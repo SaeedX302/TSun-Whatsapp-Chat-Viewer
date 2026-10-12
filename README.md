@@ -159,7 +159,8 @@ npm test             # unit + integration tests
 npm run verify:ui    # Playwright screenshots + layout assertions
 ```
 
-`npm run verify:ui` expects `npx playwright install chromium` once, a running
+`npm run verify:ui` expects Playwright (`npm i -D playwright && npx playwright
+install chromium`) once, a running
 `npm run preview`, and writes screenshots to `ui-screenshots/`. It fails if any
 viewport overflows horizontally, clips a bubble, shows the sidebar on a phone, or
 reports a runtime error.
